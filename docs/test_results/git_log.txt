@@ -1,0 +1,7 @@
+1096b62 (HEAD -> feature/sqlite-database, origin/feature/sqlite-database) Add SQLite persistence as a bonus feature
+71715a0 (origin/master, master) First Commit
+45c4be3 Improve README with setup and project documentation
+1ed631d Update manual API testing report
+6532c70 Improve API documentation with examples and error responses
+5a4f645 Add return type hint to health endpoint
+938f22a Initial commit: Set up library management API
