@@ -1,16 +1,28 @@
 
-"""In-memory repository for storing library books."""
 
+"""SQLite repository for storing library books."""
+
+from app.database import get_connection
 from app.models import Book
 
 
 class BookRepository:
-    """Manage book data using in-memory storage."""
+    """Manage book data using SQLite storage."""
 
-    def __init__(self) -> None:
-        """Initialize the book storage."""
-        self._books: dict[int, Book] = {}
-        self._next_id: int = 1
+    @staticmethod
+    def _to_book(row) -> Book | None:
+        """Convert a database row into a Book object."""
+        if row is None:
+            return None
+
+        return Book(
+            id=row["id"],
+            title=row["title"],
+            author=row["author"],
+            isbn=row["isbn"],
+            year=row["year"],
+            available=bool(row["available"]),
+        )
 
     def create(
         self,
@@ -20,25 +32,36 @@ class BookRepository:
         year: int | None,
     ) -> Book:
         """Create and store a new book."""
-        book = Book(
-            id=self._next_id,
-            title=title,
-            author=author,
-            isbn=isbn,
-            year=year,
-            available=True,
-        )
-        self._books[book.id] = book
-        self._next_id += 1
-        return book
+        with get_connection() as connection:
+            cursor = connection.execute(
+                """
+                INSERT INTO books (title, author, isbn, year)
+                VALUES (?, ?, ?, ?)
+                """,
+                (title, author, isbn, year),
+            )
+            book_id = cursor.lastrowid
+
+        return self.get_by_id(book_id)
 
     def get_by_id(self, book_id: int) -> Book | None:
         """Find a book using its ID."""
-        return self._books.get(book_id)
+        with get_connection() as connection:
+            row = connection.execute(
+                "SELECT * FROM books WHERE id = ?",
+                (book_id,),
+            ).fetchone()
+
+        return self._to_book(row)
 
     def get_all(self) -> list[Book]:
         """Return all stored books."""
-        return list(self._books.values())
+        with get_connection() as connection:
+            rows = connection.execute(
+                "SELECT * FROM books ORDER BY id"
+            ).fetchall()
+
+        return [self._to_book(row) for row in rows]
 
     def find_by_isbn(
         self,
@@ -46,10 +69,19 @@ class BookRepository:
         exclude_id: int | None = None,
     ) -> Book | None:
         """Find a book using its ISBN."""
-        for book in self._books.values():
-            if book.isbn == isbn and book.id != exclude_id:
-                return book
-        return None
+        with get_connection() as connection:
+            if exclude_id is None:
+                row = connection.execute(
+                    "SELECT * FROM books WHERE isbn = ?",
+                    (isbn,),
+                ).fetchone()
+            else:
+                row = connection.execute(
+                    "SELECT * FROM books WHERE isbn = ? AND id != ?",
+                    (isbn, exclude_id),
+                ).fetchone()
+
+        return self._to_book(row)
 
     def update(
         self,
@@ -60,27 +92,52 @@ class BookRepository:
         year: int | None,
     ) -> Book | None:
         """Update an existing book."""
-        book = self.get_by_id(book_id)
+        with get_connection() as connection:
+            cursor = connection.execute(
+                """
+                UPDATE books
+                SET title = ?, author = ?, isbn = ?, year = ?
+                WHERE id = ?
+                """,
+                (title, author, isbn, year, book_id),
+            )
 
-        if book is None:
-            return None
+            if cursor.rowcount == 0:
+                return None
 
-        book.title = title
-        book.author = author
-        book.isbn = isbn
-        book.year = year
+        return self.get_by_id(book_id)
 
-        return book
+    def set_availability(
+        self,
+        book_id: int,
+        available: bool,
+    ) -> Book | None:
+        """Update a book's availability."""
+        with get_connection() as connection:
+            cursor = connection.execute(
+                "UPDATE books SET available = ? WHERE id = ?",
+                (int(available), book_id),
+            )
+
+            if cursor.rowcount == 0:
+                return None
+
+        return self.get_by_id(book_id)
 
     def delete(self, book_id: int) -> bool:
         """Delete a book using its ID."""
-        if book_id not in self._books:
-            return False
+        with get_connection() as connection:
+            cursor = connection.execute(
+                "DELETE FROM books WHERE id = ?",
+                (book_id,),
+            )
 
-        del self._books[book_id]
-        return True
+        return cursor.rowcount > 0
 
     def reset(self) -> None:
         """Clear all books and reset the ID counter."""
-        self._books.clear()
-        self._next_id = 1
+        with get_connection() as connection:
+            connection.execute("DELETE FROM books")
+            connection.execute(
+                "DELETE FROM sqlite_sequence WHERE name = 'books'"
+            )
