@@ -54,7 +54,7 @@ def create_book() -> tuple[Response, int]:
 
 @books_bp.route("", methods=["GET"])
 def get_books() -> Response:
-    """Return all books with optional filters."""
+    """Return all books with optional filters and pagination."""
     author = request.args.get("author")
     available_value = request.args.get("available")
     available = None
@@ -70,7 +70,46 @@ def get_books() -> Response:
 
     books = book_service.list_books(author, available)
 
-    return jsonify([book_to_dict(book) for book in books])
+    # Preserve the existing response when pagination is not requested.
+    if "page" not in request.args and "per_page" not in request.args:
+        return jsonify([book_to_dict(book) for book in books])
+
+    # Read pagination parameters.
+    try:
+        page = int(request.args.get("page", "1"))
+        per_page = int(request.args.get("per_page", "10"))
+    except ValueError:
+        raise APIError(
+            "VALIDATION_ERROR",
+            "Page and per_page must be integers.",
+            400,
+        )
+
+    if page < 1 or per_page < 1 or per_page > 100:
+        raise APIError(
+            "VALIDATION_ERROR",
+            "Page must be positive and per_page must be between 1 and 100.",
+            400,
+        )
+
+    total = len(books)
+    total_pages = (total + per_page - 1) // per_page
+
+    start = (page - 1) * per_page
+    end = start + per_page
+
+    paginated_books = books[start:end]
+
+    return jsonify({
+        "books": [book_to_dict(book) for book in paginated_books],
+        "pagination": {
+            "page": page,
+            "per_page": per_page,
+            "total_books": total,
+            "total_pages": total_pages,
+        },
+    })
+
 
 
 @books_bp.route("/<int:book_id>", methods=["GET"])

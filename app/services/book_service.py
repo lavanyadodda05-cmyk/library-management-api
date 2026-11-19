@@ -143,8 +143,12 @@ class BookService:
         if not book.available:
             raise APIError("CONFLICT", "This book is already borrowed.", 409)
 
-        book.available = False
-        return book
+        updated_book = self.repository.update_availability(book_id, False)
+
+        if updated_book is None:
+            raise APIError("NOT_FOUND", f"Book {book_id} not found.", 404)
+
+        return updated_book
 
     def return_book(self, book_id: int) -> Book:
         """Mark a borrowed book as available."""
@@ -153,8 +157,12 @@ class BookService:
         if book.available:
             raise APIError("CONFLICT", "This book has not been borrowed.", 409)
 
-        book.available = True
-        return book
+        updated_book = self.repository.update_availability(book_id, True)
+
+        if updated_book is None:
+            raise APIError("NOT_FOUND", f"Book {book_id} not found.", 404)
+
+        return updated_book    
 
 
 book_repository = BookRepository()
