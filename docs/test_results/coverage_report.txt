@@ -1,0 +1,31 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.3, pytest-9.2.0, pluggy-1.7.0
+rootdir: C:\Users\HP\OneDrive\Desktop\library_management_api
+plugins: cov-7.1.0
+collected 24 items
+
+tests\test_books_borrow_return.py ......                                 [ 25%]
+tests\test_books_crud.py .....                                           [ 45%]
+tests\test_books_validation.py ............                              [ 95%]
+tests\test_health.py .                                                   [100%]
+
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.14.3-final-0 _______________
+
+Name                                  Stmts   Miss  Cover   Missing
+-------------------------------------------------------------------
+app\__init__.py                           0      0   100%
+app\config.py                             5      0   100%
+app\errors.py                            29      1    97%   51
+app\main.py                              16      2    88%   32-33
+app\models.py                             6      0   100%
+app\repositories\__init__.py              0      0   100%
+app\repositories\book_repository.py      36      2    94%   66, 78
+app\routes\__init__.py                    0      0   100%
+app\routes\books.py                      49      1    98%   69
+app\routes\health.py                      5      0   100%
+app\services\__init__.py                  0      0   100%
+app\services\book_service.py             74      7    91%   31, 37, 85, 91, 123, 130, 137
+-------------------------------------------------------------------
+TOTAL                                   220     13    94%
+============================= 24 passed in 0.38s ==============================
