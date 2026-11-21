@@ -302,7 +302,8 @@ Validation errors use HTTP `400 Bad Request` in this application.
 
 ## Storage
 
-- The application uses in-memory Python storage.
-- No database is used.
-- Book data is stored temporarily while the application is running.
-- All book data is lost when the application restarts.
+- The application uses SQLite for persistent book storage.
+- The database is initialized automatically by the application.
+- Book records are stored in the SQLite database.
+- Book data persists across application restarts as long as the database file is retained.
+- The repository layer manages database operations.
