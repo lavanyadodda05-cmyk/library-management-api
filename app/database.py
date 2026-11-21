@@ -1,3 +1,5 @@
+"""Database connection and initialization."""
+
 import sqlite3
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -14,8 +16,6 @@ DATABASE_PATH = (
 @contextmanager
 def get_connection() -> Iterator[sqlite3.Connection]:
     """Create and manage a SQLite database connection."""
-    DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
-
     connection = sqlite3.connect(DATABASE_PATH)
     connection.row_factory = sqlite3.Row
 
@@ -28,6 +28,8 @@ def get_connection() -> Iterator[sqlite3.Connection]:
 
 def init_db() -> None:
     """Create the books table if it does not exist."""
+    DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
+
     with get_connection() as connection:
         connection.execute(
             """

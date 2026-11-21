@@ -180,13 +180,13 @@ library_management_api/
 - The application follows a layered architecture:
   - Routes handle HTTP requests and responses.
   - Services handle business logic and validation.
-  - Repositories manage book storage.
-- Books are stored in Python in-memory storage.
-- No database is used.
+  - Repositories manage database operations.
+- SQLite is used for persistent book storage.
+- The database is initialized automatically by the application.
+- Book data persists across application restarts as long as the database file is retained.
 - Book IDs are generated automatically by the server.
 - New books are available by default.
 - Only borrow and return operations change book availability.
-- Book data is lost when the application restarts.
 - Centralized error handling provides consistent JSON error responses.
 - Pytest is used for automated testing.
 - pytest-cov is used to measure code coverage.
@@ -199,4 +199,4 @@ library_management_api/
 - JUnit report: `docs/test_results/junit_report.xml`
 - Coverage report: `docs/test_results/coverage_report.txt`
 - Git history: `docs/test_results/git_log.txt`
-- Screenshots: `docs/screenshots/`
+- Application and testing screenshots: `docs/screenshots/`

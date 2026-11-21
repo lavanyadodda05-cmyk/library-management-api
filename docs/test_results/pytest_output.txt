@@ -1,34 +1,48 @@
 ============================= test session starts =============================
-platform win32 -- Python 3.14.3, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\HP\OneDrive\Desktop\library_management_api\.venv\Scripts\python.exe
+platform win32 -- Python 3.14.3, pytest-9.2.0, pluggy-1.7.0 -- D:\Desktop\library_management_api\library-management-api-sqlite\.venv\Scripts\python.exe
 cachedir: .pytest_cache
-rootdir: C:\Users\HP\OneDrive\Desktop\library_management_api
+rootdir: D:\Desktop\library_management_api\library-management-api-sqlite
 plugins: cov-7.1.0
-collecting ... collected 24 items
+collecting ... collected 38 items
 
-tests/test_books_borrow_return.py::test_borrow_available_book PASSED     [  4%]
-tests/test_books_borrow_return.py::test_borrow_book_twice PASSED         [  8%]
-tests/test_books_borrow_return.py::test_return_borrowed_book PASSED      [ 12%]
-tests/test_books_borrow_return.py::test_return_available_book PASSED     [ 16%]
-tests/test_books_borrow_return.py::test_borrow_nonexistent_book PASSED   [ 20%]
-tests/test_books_borrow_return.py::test_return_nonexistent_book PASSED   [ 25%]
-tests/test_books_crud.py::test_create_book PASSED                        [ 29%]
-tests/test_books_crud.py::test_get_all_books PASSED                      [ 33%]
-tests/test_books_crud.py::test_get_book_by_id PASSED                     [ 37%]
-tests/test_books_crud.py::test_update_book PASSED                        [ 41%]
-tests/test_books_crud.py::test_delete_book PASSED                        [ 45%]
-tests/test_books_validation.py::test_missing_title PASSED                [ 50%]
-tests/test_books_validation.py::test_missing_author PASSED               [ 54%]
-tests/test_books_validation.py::test_invalid_isbn_characters PASSED      [ 58%]
-tests/test_books_validation.py::test_invalid_isbn_length PASSED          [ 62%]
-tests/test_books_validation.py::test_invalid_year_type PASSED            [ 66%]
-tests/test_books_validation.py::test_future_year PASSED                  [ 70%]
-tests/test_books_validation.py::test_duplicate_isbn PASSED               [ 75%]
-tests/test_books_validation.py::test_invalid_available_filter PASSED     [ 79%]
-tests/test_books_validation.py::test_invalid_json_body PASSED            [ 83%]
-tests/test_books_validation.py::test_unknown_url_returns_json_error PASSED [ 87%]
-tests/test_books_validation.py::test_method_not_allowed_returns_json_error PASSED [ 91%]
-tests/test_books_validation.py::test_unexpected_error_returns_json_error PASSED [ 95%]
-tests/test_health.py::test_health_check PASSED                           [100%]
+tests/test_book_repository.py::test_find_by_isbn_excludes_given_book_id PASSED [  2%]
+tests/test_book_repository.py::test_update_nonexistent_book_returns_none PASSED [  5%]
+tests/test_book_repository.py::test_set_availability_nonexistent_book_returns_none PASSED [  7%]
+tests/test_book_service_coverage.py::test_title_exceeding_limit_is_rejected PASSED [ 10%]
+tests/test_book_service_coverage.py::test_author_exceeding_limit_is_rejected PASSED [ 13%]
+tests/test_book_service_coverage.py::test_list_books_with_author_and_availability_filters PASSED [ 15%]
+tests/test_book_service_coverage.py::test_update_with_duplicate_isbn_returns_conflict PASSED [ 18%]
+tests/test_book_service_coverage.py::test_update_repository_failure_returns_not_found PASSED [ 21%]
+tests/test_book_service_coverage.py::test_delete_nonexistent_book_returns_not_found PASSED [ 23%]
+tests/test_book_service_coverage.py::test_borrow_repository_failure_returns_not_found PASSED [ 26%]
+tests/test_book_service_coverage.py::test_return_repository_failure_returns_not_found PASSED [ 28%]
+tests/test_book_service_coverage.py::test_get_books_with_available_false_filter PASSED [ 31%]
+tests/test_books_borrow_return.py::test_borrow_available_book PASSED     [ 34%]
+tests/test_books_borrow_return.py::test_borrow_book_twice PASSED         [ 36%]
+tests/test_books_borrow_return.py::test_return_borrowed_book PASSED      [ 39%]
+tests/test_books_borrow_return.py::test_return_available_book PASSED     [ 42%]
+tests/test_books_borrow_return.py::test_borrow_nonexistent_book PASSED   [ 44%]
+tests/test_books_borrow_return.py::test_return_nonexistent_book PASSED   [ 47%]
+tests/test_books_crud.py::test_create_book PASSED                        [ 50%]
+tests/test_books_crud.py::test_get_all_books PASSED                      [ 52%]
+tests/test_books_crud.py::test_get_book_by_id PASSED                     [ 55%]
+tests/test_books_crud.py::test_update_book PASSED                        [ 57%]
+tests/test_books_crud.py::test_delete_book PASSED                        [ 60%]
+tests/test_books_validation.py::test_missing_title PASSED                [ 63%]
+tests/test_books_validation.py::test_missing_author PASSED               [ 65%]
+tests/test_books_validation.py::test_invalid_isbn_characters PASSED      [ 68%]
+tests/test_books_validation.py::test_invalid_isbn_length PASSED          [ 71%]
+tests/test_books_validation.py::test_invalid_year_type PASSED            [ 73%]
+tests/test_books_validation.py::test_future_year PASSED                  [ 76%]
+tests/test_books_validation.py::test_duplicate_isbn PASSED               [ 78%]
+tests/test_books_validation.py::test_invalid_available_filter PASSED     [ 81%]
+tests/test_books_validation.py::test_invalid_json_body PASSED            [ 84%]
+tests/test_books_validation.py::test_unknown_url_returns_json_error PASSED [ 86%]
+tests/test_books_validation.py::test_method_not_allowed_returns_json_error PASSED [ 89%]
+tests/test_books_validation.py::test_unexpected_error_returns_json_error PASSED [ 92%]
+tests/test_errors.py::test_unmapped_http_error_returns_internal_error PASSED [ 94%]
+tests/test_health.py::test_health_check PASSED                           [ 97%]
+tests/test_main.py::test_main_entry_point_runs_application PASSED        [100%]
 
-- generated xml file: C:\Users\HP\OneDrive\Desktop\library_management_api\docs\test_results\junit_report.xml -
-============================= 24 passed in 0.18s ==============================
+- generated xml file: D:\Desktop\library_management_api\library-management-api-sqlite\docs\test_results\junit_report.xml -
+============================= 38 passed in 0.95s ==============================

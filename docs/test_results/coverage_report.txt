@@ -1,13 +1,17 @@
 ============================= test session starts =============================
 platform win32 -- Python 3.14.3, pytest-9.2.0, pluggy-1.7.0
-rootdir: C:\Users\HP\OneDrive\Desktop\library_management_api
+rootdir: D:\Desktop\library_management_api\library-management-api-sqlite
 plugins: cov-7.1.0
-collected 24 items
+collected 38 items
 
-tests\test_books_borrow_return.py ......                                 [ 25%]
-tests\test_books_crud.py .....                                           [ 45%]
-tests\test_books_validation.py ............                              [ 95%]
-tests\test_health.py .                                                   [100%]
+tests\test_book_repository.py ...                                        [  7%]
+tests\test_book_service_coverage.py .........                            [ 31%]
+tests\test_books_borrow_return.py ......                                 [ 47%]
+tests\test_books_crud.py .....                                           [ 60%]
+tests\test_books_validation.py ............                              [ 92%]
+tests\test_errors.py .                                                   [ 94%]
+tests\test_health.py .                                                   [ 97%]
+tests\test_main.py .                                                     [100%]
 
 =============================== tests coverage ================================
 _______________ coverage: platform win32, python 3.14.3-final-0 _______________
@@ -16,16 +20,17 @@ Name                                  Stmts   Miss  Cover   Missing
 -------------------------------------------------------------------
 app\__init__.py                           0      0   100%
 app\config.py                             5      0   100%
-app\errors.py                            29      1    97%   51
-app\main.py                              16      2    88%   32-33
+app\database.py                          17      0   100%
+app\errors.py                            29      0   100%
+app\main.py                              18      0   100%
 app\models.py                             6      0   100%
 app\repositories\__init__.py              0      0   100%
-app\repositories\book_repository.py      36      2    94%   66, 78
+app\repositories\book_repository.py      47      0   100%
 app\routes\__init__.py                    0      0   100%
-app\routes\books.py                      49      1    98%   69
+app\routes\books.py                      49      0   100%
 app\routes\health.py                      5      0   100%
 app\services\__init__.py                  0      0   100%
-app\services\book_service.py             74      7    91%   31, 37, 85, 91, 123, 130, 137
+app\services\book_service.py             78      0   100%
 -------------------------------------------------------------------
-TOTAL                                   220     13    94%
-============================= 24 passed in 0.38s ==============================
+TOTAL                                   254      0   100%
+============================= 38 passed in 0.99s ==============================
