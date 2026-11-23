@@ -4,6 +4,7 @@
 import logging
 
 from flask import Flask
+from flask_cors import CORS
 
 from app.config import Config
 from app.database import init_db
@@ -18,8 +19,19 @@ def create_app() -> Flask:
         level=getattr(logging, Config.LOG_LEVEL.upper(), logging.INFO),
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
-
     app = Flask(__name__)
+
+    CORS(
+        app,
+        resources={
+            r"/*": {
+                "origins": [
+                    "http://localhost:3000",
+                    "http://127.0.0.1:3000",
+                ]
+            }
+        },
+    )
 
     init_db()
 
